@@ -218,6 +218,8 @@ class Snackbar extends Component {
             message={message}
             action={action}
             style={bodyStyle}
+            messageRef={(ref) => this.messageElement = ref}
+            messageElement={this.messageElement}
             onActionTouchTap={onActionTouchTap}
           />
         </div>

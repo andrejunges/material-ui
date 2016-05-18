@@ -7,19 +7,20 @@ export default class SnackbarExampleSimple extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      open: false,
+      openSingleLine: false,
+      openMultiLine: false,
     };
   }
 
-  handleTouchTap = () => {
+  handleTouchTap = (fieldName) => {
     this.setState({
-      open: true,
+      [fieldName]: true,
     });
   };
 
-  handleRequestClose = () => {
+  handleRequestClose = (fieldName) => {
     this.setState({
-      open: false,
+      [fieldName]: false,
     });
   };
 
@@ -27,14 +28,27 @@ export default class SnackbarExampleSimple extends React.Component {
     return (
       <div>
         <RaisedButton
-          onTouchTap={this.handleTouchTap}
+          onTouchTap={() => this.handleTouchTap('openSingleLine')}
           label="Add to my calendar"
         />
+        <RaisedButton
+          onTouchTap={() => this.handleTouchTap('openMultiLine')}
+          label="Add to my calendar - Multiline"
+          style={{marginLeft: '20px'}}
+        />
+
         <Snackbar
-          open={this.state.open}
-          message="Event added to your calendar"
+          open={this.state.openSingleLine}
+          message="Event added to your calendar."
           autoHideDuration={4000}
-          onRequestClose={this.handleRequestClose}
+          onRequestClose={() => this.handleRequestClose('openSingleLine')}
+        />
+        <Snackbar
+          open={this.state.openMultiLine}
+          message="Event added to your calendar. Please do not forget about it
+            - this is a multiline message, be aware that 2 lines are the limit."
+          autoHideDuration={4000}
+          onRequestClose={() => this.handleRequestClose('openMultiLine')}
         />
       </div>
     );

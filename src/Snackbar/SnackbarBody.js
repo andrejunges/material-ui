@@ -26,13 +26,15 @@ function getStyles(props, context) {
   } = context;
 
   const isSmall = width === SMALL;
+  const isMultiline = props.messageElement && props.messageElement.offsetHeight > 20;
+  const rootHeight = isMultiline ? '80px' : `${desktopSubheaderHeight}px`;
 
   const styles = {
     root: {
       backgroundColor: backgroundColor,
       padding: `0 ${desktopGutter}px`,
-      height: desktopSubheaderHeight,
-      lineHeight: `${desktopSubheaderHeight}px`,
+      height: rootHeight,
+      lineHeight: rootHeight,
       borderRadius: isSmall ? 0 : 2,
       maxWidth: isSmall ? 'inherit' : 568,
       minWidth: isSmall ? 'inherit' : 288,
@@ -40,6 +42,9 @@ function getStyles(props, context) {
       margin: 'auto',
     },
     content: {
+      display: 'flex',
+      height: '100%',
+      alignItems: 'center',
       fontSize: 14,
       color: textColor,
       opacity: open ? 1 : 0,
@@ -54,6 +59,12 @@ function getStyles(props, context) {
       marginRight: -16,
       marginLeft: desktopGutter,
       backgroundColor: 'transparent',
+    },
+    message: {
+      display: 'inline-block',
+      lineHeight: '20px',
+      maxHeight: '40px',
+      overflow: 'hidden',
     },
   };
 
@@ -84,7 +95,7 @@ export const SnackbarBody = (props, context) => {
   return (
     <div {...other} style={prepareStyles(Object.assign(styles.root, style))}>
       <div style={prepareStyles(styles.content)}>
-        <span>{message}</span>
+        <span style={prepareStyles(styles.message)} ref={props.messageRef}>{message}</span>
         {actionButton}
       </div>
     </div>
@@ -104,6 +115,11 @@ SnackbarBody.propTypes = {
    * showing again)
    */
   message: PropTypes.node.isRequired,
+  /**
+   * @ignore
+   * Internal property to hold the message element so we can get it's height and define if it's multine.
+   */
+  messageRef: PropTypes.any,
   /**
    * Fired when the action button is touchtapped.
    *
