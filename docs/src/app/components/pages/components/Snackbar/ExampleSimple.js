@@ -7,20 +7,27 @@ export default class SnackbarExampleSimple extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openSingleLine: false,
-      openMultiLine: false,
+      open: false,
+      message: '',
+    };
+    this.messages = {
+      short: 'Event added to your calendar.',
+      long: 'Event added to your calendar. Please do not forget about it. This is a multiline message, ' +
+      'be aware that 2 lines are the limit.',
     };
   }
 
-  handleTouchTap = (fieldName) => {
+  handleTouchTap = (message) => {
+
     this.setState({
-      [fieldName]: true,
+      open: true,
+      message: message,
     });
   };
 
-  handleRequestClose = (fieldName) => {
+  handleRequestClose = () => {
     this.setState({
-      [fieldName]: false,
+      open: false,
     });
   };
 
@@ -28,27 +35,20 @@ export default class SnackbarExampleSimple extends React.Component {
     return (
       <div>
         <RaisedButton
-          onTouchTap={() => this.handleTouchTap('openSingleLine')}
+          onTouchTap={() => this.handleTouchTap(this.messages.short)}
           label="Add to my calendar"
         />
         <RaisedButton
-          onTouchTap={() => this.handleTouchTap('openMultiLine')}
+          onTouchTap={() => this.handleTouchTap(this.messages.long)}
           label="Add to my calendar - Multiline"
           style={{marginLeft: '20px'}}
         />
 
         <Snackbar
-          open={this.state.openSingleLine}
-          message="Event added to your calendar."
+          open={this.state.open}
+          message={this.state.message}
           autoHideDuration={4000}
-          onRequestClose={() => this.handleRequestClose('openSingleLine')}
-        />
-        <Snackbar
-          open={this.state.openMultiLine}
-          message="Event added to your calendar. Please do not forget about it
-            - this is a multiline message, be aware that 2 lines are the limit."
-          autoHideDuration={4000}
-          onRequestClose={() => this.handleRequestClose('openMultiLine')}
+          onRequestClose={() => this.handleRequestClose()}
         />
       </div>
     );
